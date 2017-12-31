@@ -22,9 +22,9 @@ const writeKeys = key => {
 
 //MAIN THING ====================================
 
-const test = 'publicKeyInbound';
+const test = 'publicKeyInbound'; //or, privateKeyInbound, or, generatePair
 
-const text = fs.readFileSync('testNodeRsa.js').toString();
+const text = fs.readFileSync('README').toString();
 const privateKeyInbound = fs.readFileSync('nodeTestKeys/test1').toString();
 const publicKeyInbound = fs.readFileSync('nodeTestKeys/test1.pem').toString();
 
@@ -54,7 +54,6 @@ switch (test) {
 
 let encrypted = key.encrypt(text, 'base64');
 
-
 switch (test) {
 	case 'privateKeyInbound':
 		key.importKey(publicKeyInbound, 'pkcs1-public'); //also works with private key
@@ -75,7 +74,7 @@ try {
 }
 
 if (decrypted == text) {
-	console.log(`\nIT WORKS. THEY MATCH!! (${test})`);
+	console.log(`\nIT WORKS. Plaintext and Decrypted MATCH!! (${test})`);
 } else {
 	console.log(`\n== Decrypted does not match test string (${test}) ==`);
 }  
