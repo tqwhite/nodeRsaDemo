@@ -1,7 +1,5 @@
 
-THIS IS NOT INTENDED TO BE AN EXAMPLE OF GOOD CODE.
-
-When I was trying ot make node-rsa work, I felt that the instructions were a little bit
+When I was trying to make node-rsa work, I felt that the instructions were a little bit
 cryptic. It took way too much time for figure out the hyphenated argument structure,
 ie, pkcs1-public.
 
