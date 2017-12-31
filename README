@@ -1,0 +1,29 @@
+
+THIS IS NOT INTENDED TO BE AN EXAMPLE OF GOOD CODE.
+
+When I was trying ot make node-rsa work, I felt that the instructions were a little bit
+cryptic. It took way too much time for figure out the hyphenated argument structure,
+ie, pkcs1-public.
+
+Also, I'm not a huge expert in encryption stuff so it took way too long to figure out that
+the key produced by ssh-keygen was wrong and what to do about fixing it.
+
+So, when I got it working, I tuned this up for readability and put it in a repo so
+that you can find it. It does three things. 
+
+1) Encrypt with public key/decrypt with private key, both from files
+2) Encrypt with private key/decrypt with private key, both from files
+3) Generate keys to use for decryption and print them out
+
+If you look closely, you will see the command to convert the .pub into a .pem,
+ie, 
+
+ssh-keygen -f keyName.pub -e -m pem > keyName.pem
+
+You're welcome.
+
+If you have any suggestions, improvements or elaborations, I'm happy to see them. Fork!!
+
+Best,
+TQ White II
+12/31/17
