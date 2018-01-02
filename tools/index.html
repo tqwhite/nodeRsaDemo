@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta content='text/html; charset=utf-8' http-equiv='Content-Type'><!-- META http-equiv="refresh" content="5;URL=http://somewhere.com" -->
+	<title>RSA/Public Key Encryption Tool</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js">
+	</script><!--link rel='stylesheet' type='text/css' href='css/main.css' /-->
+
+	<style type='text/css'>
+	      <!--
+	         
+	             body {
+	                 color:#4B92D1;
+	                 font-family:sans-serif;
+	             }
+	             
+	             .headerText{
+	             
+	              font-size:10pt;
+	              color:#666;
+	              line-height:1.2;
+}
+	             
+	             .info{
+	                  display: flex;
+	                  flex-direction: row;
+	                  justify-content: space-between;
+	              margin:0px 5vw;
+	             }
+	             
+	             .info div{
+	              width:25vw;
+	             }
+	             
+	             .annotation{
+	             margin:10px 0vw;text-align:center;width:100%;
+	             font-weight:bold;
+	             font-style:italic;
+	             color:#999;
+	             }
+	             
+	             .annotation a{
+	             color:#99f;
+	             }
+	             
+	             .instructions{
+	             
+	                  display: flex;
+	                  flex-direction: row;
+	                  justify-content: space-between;
+	             font-weight:bold;
+	             color:#666;
+	              margin:15px 5vw;
+	             }
+	             
+	             #mainContainer{
+	              
+	             }
+	             
+	             .rowSegment{
+	                  margin-bottom:20px;
+	              border-bottom:1pt solid #666;
+	              padding:10px 0px;
+	             }
+	             
+	             .activeBits{
+	                  display: flex;
+	                  flex-direction: row;
+	                  justify-content: space-between;
+	                  width:20vw;
+	             
+	             }
+	             
+	             .buttonSection{
+	                  display: flex;
+	                  flex-direction: row;
+	                  align-items: center;
+	             }
+	             
+	             .buttonSection .center{
+	                  display: flex;
+	                  flex-direction: column;
+	                  align-items: center;
+	                  width:20vw;
+	             
+	             }
+	             
+	             .button{
+	              margin:5px;
+	             }
+	             
+	             .textareaSegment{
+	                  display: flex;
+	                  flex-direction: row;
+	                  justify-content: space-between;
+	             
+	             }
+	             
+	             textarea{
+	             height:100px;width:400px; 
+	                  margin:10px;
+	             }
+	             .status{
+	              text-align:center;
+	              min-height:12px;
+	             }
+	             
+	             .segmentRule{
+	             	width:70%;
+	             }
+	             
+	         -->
+	</style>
+</head>
+<body>
+	<div id='mainContainer'>
+		<div class='headerText info' style='border-bottom:none;'>
+			<div>
+				This tool does public key encryption and decryption. It does the entire process in the browser. No data, keys or crypto are sent to any server. (Check the developer panel network tab for confirmation.)				
+			</div>
+			<div>
+				<div>
+					1) Generate a key pair.
+				</div>
+				<div>
+					2) Extract a public key from a private key.
+				</div>
+				<div>
+					3) Manually enter public or private key.
+				</div>
+			</div>
+			<div>
+				<div>
+					4) Create a crypto text string from plain text input.
+					<div style='font-size:80%;margin-left:10px;'>
+						<i>(Requires entering either a public or private key or both.)</i>
+					</div>
+				</div>
+				<div>
+					5) Extract plain text from a crypto string.
+					<div style='font-size:80%;margin-left:10px;'>
+						<i>(Requires entering a private key.)</i>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class='headerText annotation' style=''>
+						This tool is based on the excellent <a href='https://www.npmjs.com/package/node-rsa'>node-rsa</a> and <a href='http://browserify.org'>Browserify</a>. 
+						Read more and get the code from this <a href='http://tech.genericwhite.com/public-key-encryption-for-nodejs-with-node-rsa'>blog post</a> and <a href='https://github.com/tqwhite'>github</a>. Written by TQ White II.<br>
+	</div>
+		
+		
+		<div class='instructions' style=''><div style='padding-top: 8px'>Quick Start: Click 'Generate Keys', Click 'Encrypt', Click 'Decrypt'</div>
+		<div><input style='font-size:110%;' class='button' name='clearAll' type='button' value='Clear Entire App'></div></div>
+		
+		
+		<div class='rowSegment'>
+			<div class='activeBits'>
+				<div class='buttonSection'>
+					<div class='center'>
+						<input class='button' name='generateKeys' type='button' value='Generate Keys'><br>
+						<input class='button' name='extractPublic' type='button' value='Extract Public from Private'><br>
+						<hr class='segmentRule'>
+						<input class='button' name='clearThis' type='button' value='Clear This'>
+						<input class='button' name='clearPublicKey' type='button' value='Clear Public Key'><br>
+
+					</div>
+				</div>
+				<div class='textareaSegment' id='keys'>
+					<div class='textareaBlock'>
+						<div class='title'>
+							Private Key
+						</div>
+						<textarea id='privateKey'></textarea>
+					</div>
+				</div>
+				<div class='textareaBlock'>
+					<div class='title'>
+						Public Key
+					</div>
+					<textarea id='publicKey'></textarea>
+				</div>
+			</div>
+			<div class='status'>
+			</div>
+		</div>
+		
+		
+		
+		<div class='rowSegment'>
+			<div class='activeBits'>
+				<div class='buttonSection'>
+					<div class='center'>
+						<input class='button' name='encrypt' type='button' value='Encrypt'><br>
+						<hr class='segmentRule'>
+						<input class='button' name='clearThis' type='button' value='Clear This'>
+					</div>
+				</div>
+				<div class='textareaSegment' id='plaintext'>
+					<div class='textareaBlock'>
+						<div class='title'>
+							Plain Text Input
+						</div>
+						<textarea id='plainTextInput'>Enter Text Here</textarea>
+					</div>
+				</div>
+				<div class='textareaBlock'>
+					<div class='title'>
+						Generated Crypto Text
+					</div>
+					<textarea id='cryptoTextOutput'></textarea>
+				</div>
+			</div>
+			<div class='status'></div>
+	</div>
+	
+	
+	<div class='rowSegment'>
+		<div class='activeBits'>
+			<div class='buttonSection'>
+				<div class='center'>
+					<input class='button' name='decrypt' type='button' value='Decrypt' title='Copies Generated Crypto Text if input field is empty.'><br>
+						<hr class='segmentRule'>
+						<input class='button' name='clearThis' type='button' value='Clear This'>
+						<input class='button' name='clearCryptoTextInput' type='button' value='Clear Crypto Text Input'><br>
+				</div>
+			</div>
+			<div class='textareaSegment' id='cryptoText'>
+				<div class='textareaBlock'>
+					<div class='title'>
+						Crypto Text Input
+					</div>
+					<textarea id='cryptoTextInput'></textarea>
+				</div>
+			</div>
+			<div class='textareaBlock'>
+				<div class='title'>
+					Decrypted Plain Text
+				</div>
+				<textarea id='plainTextOutput'></textarea>
+			</div>
+		</div>
+		<div class='status'></div>
+	</div>
+	
+	
+	<script src="rsaFunctionsBrowserify.js">
+	</script> 
+	<script type='text/javascript'>
+	         /* <![CDATA[ */
+$(document).ready(function() {
+	const rsaFunctions = new window.rsaFunctions();
+	
+	const processChangedData=event=>{
+	
+			if (event) {
+				const item = $(event.target);
+				window.item=item;
+				const name = item.attr('id');
+				const status = item.parent().parent().parent().parent().find('.status').text('');
+	
+				const privateKey = $('#privateKey').val();
+				const publicKey = $('#publicKey').val();
+				rsaFunctions.setKeys(privateKey, publicKey, status);
+			}
+			
+			updateButtonStatus();
+		}
+
+	const updateButtonStatus = () => {
+		
+		const emptyList = [];
+		$('textarea').each((inx, item) => {
+			const domObj = $(item);
+			if (!domObj.val()) {
+				emptyList.push(domObj.attr('id'));
+			}
+		});
+
+		$('input').prop('disabled', false);
+		const bothKeysEmpty=emptyList.includes('privateKey') && emptyList.includes('publicKey')
+
+		!(bothKeysEmpty || emptyList.includes('plainTextInput')) || $('[name="encrypt"]').prop('disabled', true);
+
+		const noCryptoTextAnywhere=emptyList.includes('cryptoTextInput') && emptyList.includes('cryptoTextOutput');
+		
+		!(bothKeysEmpty || noCryptoTextAnywhere) || $('[name="decrypt"]').prop('disabled', true);
+		!emptyList.includes('privateKey') || $('[name="extractPublic"]').prop('disabled', true);
+
+
+	};
+
+	updateButtonStatus(); //set initial button status
+
+	$('textarea').on('change', processChangedData);
+
+	$('.button').on('click', event => {
+		const privateKey = $('#privateKey').val();
+		const publicKey = $('#publicKey').val();
+
+		const item = $(event.target);
+		const name = item.attr('name');
+		const container = item.parent().parent().parent().parent();
+		const status = container.find('.status');
+		const thisStatus = $(status[0]);
+
+		const dataObjects = {
+			status: { domObj: thisStatus },
+			requestingContainer: container
+		};
+
+		$('body').find('textarea').each((inx, item) => {
+			const domObj = $(item);
+			const name = domObj.prop('id');
+			dataObjects[name] = {
+				domObj: domObj,
+				value: domObj.val(),
+				requestingContainer: container
+			};
+		});
+
+		[
+			'clearThis',
+			'clearPublicKey',
+			'clearCryptoTextInput',
+			'clearAll'
+		].includes(name) ||
+			dataObjects.status.domObj.text(
+				'Be patient. Some operations can take ten or twenty seconds.'
+			);
+
+		setTimeout(() => {
+			rsaFunctions[name](dataObjects, $(status[0]));
+			updateButtonStatus();
+		}, 500);
+	});
+});
+
+
+      /* ]]> */
+	</script>
+</body>
+</html>

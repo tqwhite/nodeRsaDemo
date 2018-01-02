@@ -39,8 +39,24 @@ If you put this repository someplace you can serve html, it will let you play wi
 
 You can also play with it at: http://genericwhite.com/rsaEncryptionDemo/testNodeRsaBrowser.html
 
+CHAPTER THREE
+
+My interest in public key encryption continues. I wanted to be able to actually use a tool to play so I wrote one. 
+
+It does these things:
+
+1) Generate a key pair.
+2) Extract a public key from a private key.
+3) Manually enter public or private key.
+4) Create a crypto text string from plain text input.
+5) Extract plain text from a crypto string.
+
+
+You can play with this at:
+http://genericwhite.com/rsaEncryptionDemo/
+
 If you have any suggestions, improvements or elaborations, I'm happy to see them. Fork!!
 
 Best,
 TQ White II
-12/31/17
+1/1/18
