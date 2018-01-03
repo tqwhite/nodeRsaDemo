@@ -4385,10 +4385,10 @@ var moduleFunction = function(args) {
 		} else {
 			status.text('No crypto text exists');
 		}
-		
+		console.log('revised 1/2/18');
 		let decrypted;
 		try {
-			const decrypted = key.decrypt(cryptoText, 'utf8');
+			decrypted = key.decrypt(cryptoText, 'utf8');
 		} catch (e) {
 			status.text(e.toString());
 			return;
